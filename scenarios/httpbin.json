@@ -1,0 +1,11 @@
+{
+  "target": "https://httpbin.org/get",
+  "method": "GET",
+  "concurrency": 32,
+  "durationSecs": 12,
+  "rps": 100,
+  "timeoutMs": 5000,
+  "headers": {},
+  "body": null,
+  "warmupSecs": 1
+}

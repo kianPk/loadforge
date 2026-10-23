@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loadforge — Rust HTTP load forge</title>
+  <meta name="description" content="Loadforge — high-concurrency HTTP load testing with Tokio workers and a live Axum + WebSocket dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="spark-field" aria-hidden="true"></div>
+  <div class="shell">
+    <header class="top">
+      <div class="brand">
+        <div class="anvil" aria-hidden="true"></div>
+        <div>
+          <h1>Loadforge</h1>
+          <p>Rust · Tokio · Axum · live WebSocket metrics</p>
+        </div>
+      </div>
+      <div class="top-meta">
+        <span id="linkState" class="chip">connecting</span>
+        <span id="modeChip" class="chip mute">live</span>
+      </div>
+    </header>
+
+    <section class="hero-strip">
+      <div>
+        <p class="kicker">HTTP load forge</p>
+        <h2>Hammer endpoints. Watch latency bend in real time.</h2>
+      </div>
+      <div class="hero-cta">
+        <button type="button" id="btnStart" class="btn primary">Ignite</button>
+        <button type="button" id="btnStop" class="btn ghost" disabled>Cool down</button>
+      </div>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="Live metrics"></section>
+
+    <div class="layout">
+      <aside class="controls">
+        <h3>Run config</h3>
+        <label>Target URL
+          <input id="target" type="url" value="https://httpbin.org/get" autocomplete="off" />
+        </label>
+        <div class="row2">
+          <label>Method
+            <select id="method">
+              <option>GET</option>
+              <option>POST</option>
+              <option>PUT</option>
+              <option>PATCH</option>
+              <option>DELETE</option>
+              <option>HEAD</option>
+            </select>
+          </label>
+          <label>Concurrency
+            <input id="concurrency" type="number" min="1" max="10000" value="48" />
+          </label>
+        </div>
+        <div class="row2">
+          <label>Duration (s)
+            <input id="duration" type="number" min="1" max="3600" value="20" />
+          </label>
+          <label>RPS cap
+            <input id="rps" type="number" min="0" max="200000" value="0" placeholder="unlimited" />
+          </label>
+        </div>
+        <div class="row2">
+          <label>Timeout (ms)
+            <input id="timeout" type="number" min="100" max="120000" value="5000" />
+          </label>
+          <label>Warmup (s)
+            <input id="warmup" type="number" min="0" max="60" value="1" />
+          </label>
+        </div>
+        <label>Body (optional)
+          <textarea id="body" rows="3" placeholder='{"ping":true}'></textarea>
+        </label>
+        <p class="fine">Only forge systems you own or have permission to test.</p>
+      </aside>
+
+      <section class="stage">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Latency stream</h3>
+            <span id="p99Label" class="mono">p99 —</span>
+          </div>
+          <canvas id="latencyChart" height="160" aria-label="Latency chart"></canvas>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Status mix</h3>
+            <span id="totalLabel" class="mono">0 req</span>
+          </div>
+          <div class="bars" id="statusBars"></div>
+        </div>
+        <div class="panel log-panel">
+          <div class="panel-head">
+            <h3>Forge log</h3>
+            <span id="runId" class="mono">—</span>
+          </div>
+          <pre id="log" class="log"></pre>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <span>kianPk / loadforge</span>
+      <a href="https://github.com/kianPk/loadforge" target="_blank" rel="noopener">source</a>
+    </footer>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
