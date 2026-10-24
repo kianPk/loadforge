@@ -192,6 +192,20 @@ impl Metrics {
             p95_ms: hist.percentile(0.95),
             p99_ms: hist.percentile(0.99),
             mean_ms: hist.mean_approx(),
+            error_rate: if total == 0 {
+                0.0
+            } else {
+                err as f64 / total as f64
+            },
+            error_budget_remaining: {
+                // Soft SLO: keep error rate under 1%. Remaining is how much headroom is left.
+                let rate = if total == 0 {
+                    0.0
+                } else {
+                    err as f64 / total as f64
+                };
+                (0.01 - rate).clamp(-1.0, 0.01)
+            },
             status_2xx: self.status_2xx.load(Ordering::Relaxed),
             status_3xx: self.status_3xx.load(Ordering::Relaxed),
             status_4xx: self.status_4xx.load(Ordering::Relaxed),
@@ -221,6 +235,10 @@ pub struct Snapshot {
     pub p95_ms: f64,
     pub p99_ms: f64,
     pub mean_ms: f64,
+    /// Fraction of requests that failed (0.0–1.0).
+    pub error_rate: f64,
+    /// Headroom vs a 1% error SLO (negative = over budget).
+    pub error_budget_remaining: f64,
     pub status_2xx: u64,
     pub status_3xx: u64,
     pub status_4xx: u64,
