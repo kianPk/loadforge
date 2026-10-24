@@ -84,3 +84,7 @@ docs/         GitHub Pages copy (demo mode on github.io)
 ## License
 
 MIT © Kian Zarandi ([@kianPk](https://github.com/kianPk))
+## Reliability notes
+
+Treat sustained 5xx / transport errors as a signal to stop the run or lower concurrency.
+Target a soft 1% error budget on long soak tests; watch p99 alongside mean latency.
