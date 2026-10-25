@@ -4,8 +4,11 @@ use std::collections::HashMap;
 use std::time::Duration;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RunConfig {
+    /// Optional note in scenario files (ignored by the engine).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     pub target: String,
     pub method: String,
     pub concurrency: u32,
@@ -29,6 +32,7 @@ impl Default for RunConfig {
             headers: HashMap::new(),
             body: None,
             warmup_secs: 0,
+            description: None,
         }
     }
 }

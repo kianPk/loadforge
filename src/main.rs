@@ -95,8 +95,13 @@ async fn main() -> Result<()> {
             warmup,
         } => {
             let cfg = if let Some(path) = scenario {
-                let raw = tokio::fs::read_to_string(path).await?;
-                serde_json::from_str::<RunConfig>(&raw)?.sanitize()
+                let raw = tokio::fs::read_to_string(&path).await?;
+                let cfg = if path.extension().is_some_and(|e| e == "toml") {
+                    toml::from_str::<RunConfig>(&raw)?
+                } else {
+                    serde_json::from_str::<RunConfig>(&raw)?
+                };
+                cfg.sanitize()
             } else {
                 let mut map = HashMap::new();
                 for h in headers {
@@ -114,6 +119,7 @@ async fn main() -> Result<()> {
                     headers: map,
                     body,
                     warmup_secs: warmup,
+                    description: None,
                 }
                 .sanitize()
             };

@@ -1,0 +1,11 @@
+# Burst profile: short warmup, then a high-RPS spike (adjust target to your staging URL).
+description = "3s warmup discard, then ~400 RPS for 10s at 96 workers"
+target = "https://httpbin.org/get"
+method = "GET"
+concurrency = 96
+durationSecs = 10
+rps = 400
+timeoutMs = 5000
+warmupSecs = 3
+
+[headers]

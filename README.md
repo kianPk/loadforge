@@ -26,7 +26,8 @@ cargo run --release -- run \
   --url https://httpbin.org/get \
   --concurrency 64 \
   --duration 20 \
-  --rps 200
+  --rps 200 \
+  --warmup 2
 ```
 
 Open [http://127.0.0.1:7070](http://127.0.0.1:7070) → set a target → **Ignite**.
@@ -34,10 +35,12 @@ Open [http://127.0.0.1:7070](http://127.0.0.1:7070) → set a target → **Ignit
 ## Also in this release
 
 - `GET /api/report` — graded summary (A–D) with notes
-- `scenarios/*.json` — headless runs via `--scenario`
+- `scenarios/*.json` or `*.toml` — headless runs via `--scenario`
+- `--warmup` / `warmupSecs` — requests during warmup are **not** counted in final metrics
 
 ```bash
 cargo run --release -- run --scenario scenarios/httpbin.json
+cargo run --release -- run --scenario scenarios/spike.toml
 ```
 
 ## API
